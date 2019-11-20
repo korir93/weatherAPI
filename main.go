@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"encoding/json"	
 	"io/ioutil"
-	"fmt"
+	//"fmt"
 	"weatheropenAPI/config"
 	"github.com/gorilla/mux"
 
@@ -57,6 +57,9 @@ type weatherResponse struct {
 	config.SetConfig(conf) 
 		return conf
  }
+ func enableCors(w *http.ResponseWriter) {
+    (*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
 
 func main()  {
 	
@@ -65,6 +68,7 @@ func main()  {
 	http.ListenAndServe(":5000", router)		
 }
 func getbycityname(w http.ResponseWriter, r *http.Request){
+	enableCors(&w)
 	city:= r.URL.Query().Get("city")
 	data,_:=get(city)
 //	if  r!=nil {
@@ -73,7 +77,7 @@ func getbycityname(w http.ResponseWriter, r *http.Request){
      w.Header().Add("Content-Type", "application/json") 
 	 w.Write(data) 
 	 return
-fmt.Println(string(data))
+//fmt.Println(string(data))
 }
 func  get(city string)([]byte,error){
 	client := &http.Client{}
